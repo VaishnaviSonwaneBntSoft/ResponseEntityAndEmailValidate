@@ -1,3 +1,4 @@
+
 package com.springboot.service;
 
 import java.util.ArrayList;
@@ -5,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.springboot.DAO.StudentJpaRepo;
+import com.springboot.Exception.DuplicateEmailEntryException;
 import com.springboot.entity.Student;
 
 @Service
@@ -15,8 +17,15 @@ public class StudentServiceImpl implements StudentService{
 
     @Override
     public void insertStudent(Student s) {
+        boolean result = studentJpaRepo.existsByEmail(s.getEmail());
+        if(result==true)
+        {
+            DuplicateEmailEntryException exception = new DuplicateEmailEntryException();
+            throw exception;
+        }else{
+            studentJpaRepo.save(s);
+        }
         System.out.println("Hey i am in serviceImpl");
-        studentJpaRepo.save(s);
     }
 
     @Override
@@ -38,8 +47,4 @@ public class StudentServiceImpl implements StudentService{
         studentJpaRepo.deleteById(id);
     }
 
-    @Override
-    public boolean existsByEmail(String email){
-        return studentJpaRepo.existsByEmail(email);
-    }
 }

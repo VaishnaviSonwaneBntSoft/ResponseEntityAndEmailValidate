@@ -1,6 +1,8 @@
 package com.springboot.controller;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import com.springboot.Exception.DuplicateEmailEntryException;
 import com.springboot.Response.SuccsesResponse;
 import com.springboot.entity.Student;
 import com.springboot.service.StudentService;
@@ -32,17 +34,17 @@ public class StudentController {
 
     @PostMapping("/addstudent")
     public ResponseEntity<SuccsesResponse> addStudent(@RequestBody Student s) {
-        boolean result = service.existsByEmail(s.getEmail());
-        System.out.println(result);
-        if(result==true)
-        {
-            succsesResponse = new SuccsesResponse("Duplicate Email entry", 400, s);
-            return new ResponseEntity<SuccsesResponse>(succsesResponse, HttpStatus.BAD_REQUEST);
-        }else{
-            service.insertStudent(s);
-            succsesResponse = new SuccsesResponse("Student Data Added", 201, s);
-            return new ResponseEntity<SuccsesResponse>(succsesResponse, HttpStatus.CREATED);
-        }
+            try{
+                service.insertStudent(s);
+                succsesResponse = new SuccsesResponse("Student Data Added", 201, s);
+                return new ResponseEntity<SuccsesResponse>(succsesResponse, HttpStatus.CREATED);
+            }
+            catch(Exception ex)
+            {
+                String messgae = ((DuplicateEmailEntryException) ex).reportDuplicateEmailError();
+                succsesResponse = new SuccsesResponse(messgae , 201, null);
+                return new ResponseEntity<SuccsesResponse>(succsesResponse, HttpStatus.CREATED);
+            }
     }
 
     @GetMapping("/getstudent")
