@@ -7,5 +7,5 @@ import com.springboot.entity.Student;
 
 @Repository
 public interface StudentJpaRepo  extends JpaRepository<Student , Integer>{
-
+   boolean existsByEmail(String email);
 }

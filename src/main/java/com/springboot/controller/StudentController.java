@@ -1,9 +1,7 @@
 package com.springboot.controller;
 
 import org.springframework.web.bind.annotation.RestController;
-
 import com.springboot.Response.SuccsesResponse;
-import com.springboot.entity.Email;
 import com.springboot.entity.Student;
 import com.springboot.service.StudentService;
 
@@ -34,22 +32,23 @@ public class StudentController {
 
     @PostMapping("/addstudent")
     public ResponseEntity<SuccsesResponse> addStudent(@RequestBody Student s) {
-        service.insertStudent(s);
-        succsesResponse = new SuccsesResponse("Student Data Added", 201, s);
-        return new ResponseEntity<SuccsesResponse>(succsesResponse, HttpStatus.CREATED);
+        boolean result = service.existsByEmail(s.getEmail());
+        System.out.println(result);
+        if(result==true)
+        {
+            succsesResponse = new SuccsesResponse("Duplicate Email entry", 400, s);
+            return new ResponseEntity<SuccsesResponse>(succsesResponse, HttpStatus.BAD_REQUEST);
+        }else{
+            service.insertStudent(s);
+            succsesResponse = new SuccsesResponse("Student Data Added", 201, s);
+            return new ResponseEntity<SuccsesResponse>(succsesResponse, HttpStatus.CREATED);
+        }
     }
 
     @GetMapping("/getstudent")
     public ResponseEntity<SuccsesResponse> getStudents() {
         List<Student> sList = service.getAllStudents();
         succsesResponse = new SuccsesResponse("Student Data Retrived", 200, sList);
-        return new ResponseEntity<>(succsesResponse, HttpStatus.OK);
-    }
-
-    @GetMapping("/getemails")
-    public ResponseEntity<SuccsesResponse> getEmails() {
-        List<Email> eList = service.getAllEmailList();
-        succsesResponse = new SuccsesResponse("Student Data Retrived", 200, eList);
         return new ResponseEntity<>(succsesResponse, HttpStatus.OK);
     }
 

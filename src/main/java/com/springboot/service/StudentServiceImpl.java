@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.springboot.DAO.StudentEmailRepo;
 import com.springboot.DAO.StudentJpaRepo;
-import com.springboot.entity.Email;
 import com.springboot.entity.Student;
 
 @Service
@@ -15,9 +12,6 @@ public class StudentServiceImpl implements StudentService{
    
     @Autowired
     private StudentJpaRepo studentJpaRepo;
-
-    @Autowired
-    private StudentEmailRepo studentEmailRepo;
 
     @Override
     public void insertStudent(Student s) {
@@ -45,8 +39,7 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public List<Email> getAllEmailList() {
-       return studentEmailRepo.findAll();
+    public boolean existsByEmail(String email){
+        return studentJpaRepo.existsByEmail(email);
     }
-
 }
