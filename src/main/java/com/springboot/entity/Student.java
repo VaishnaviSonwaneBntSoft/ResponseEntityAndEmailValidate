@@ -3,9 +3,15 @@ package com.springboot.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Builder
 @Table(name = "studentrecords")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Student {
 
     @Id

@@ -18,13 +18,34 @@ repositories {
 }
 
 dependencies {
+	
+	//Helps with connecting to databases using JDBC
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+
+	//Provides tools for building web applications.like Tomcat server, Spring MVC, and other web-related dependencies.
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	//Simplifies database access using JPA It provides JPA-related configurations, repositories, and utilities.
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	//Offers features for faster development like auto-restart It includes automatic application restart,
+	// which speeds up the development cycle by reloading the application when changes are detected.
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// JDBC driver for connecting to PostgreSQL databases.
 	runtimeOnly 'org.postgresql:postgresql'
+
+	// Includes testing libraries for unit and integration testing.
+	//includes JUnit, Spring Test, AssertJ, Hamcrest, and other testing utilities. 
+	//It enables writing and running unit, integration, and end-to-end tests for your application.
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	//Allows running JUnit 5 tests. 
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	//Reduces boilerplate code in Java classes with annotations.
+	// by automatically generating getter, setter, equals, hashCode, and toString methods at compile time.
+	// It provides annotations to simplify Java development.
 	compileOnly 'org.projectlombok:lombok'
   	annotationProcessor 'org.projectlombok:lombok'
 }
