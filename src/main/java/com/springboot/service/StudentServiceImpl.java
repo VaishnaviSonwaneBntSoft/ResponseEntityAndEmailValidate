@@ -3,9 +3,12 @@ package com.springboot.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.springboot.DAO.StudentJpaRepo;
+import com.springboot.Exception.DataNotFoundException;
 import com.springboot.Exception.DuplicateEmailEntryException;
 import com.springboot.entity.Student;
 
@@ -38,6 +41,7 @@ public class StudentServiceImpl implements StudentService{
 
     @Override
     public Student updateStudent(Student s, int id) {
+        
         return studentJpaRepo.save(s);
     }
 
@@ -45,6 +49,19 @@ public class StudentServiceImpl implements StudentService{
     public void deleteStudent(int id) {
         System.out.println("Hey i am in delete student");
         studentJpaRepo.deleteById(id);
+    }
+
+    @Override
+    public Optional<Student> getStudentsById(int id) {
+
+        Optional<Student> sOptional = studentJpaRepo.findById(id);
+
+        if(sOptional.isEmpty())
+        {
+           throw new DataNotFoundException();
+        }  
+            return sOptional;
+
     }
 
 }

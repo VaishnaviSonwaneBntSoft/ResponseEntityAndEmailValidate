@@ -13,4 +13,10 @@ public class SuccsesResponse {
     private String message;
     private int status;
     private Object data;
+
+    public SuccsesResponse(String message , int status)
+    {
+        this.message=message;
+        this.status=status;
+    }
 }

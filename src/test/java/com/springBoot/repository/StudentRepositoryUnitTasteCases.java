@@ -1,4 +1,4 @@
-package com.springBoot;
+package com.springBoot.repository;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.List;
@@ -6,16 +6,13 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.springboot.DAO.StudentJpaRepo;
 import com.springboot.entity.Student;
 
 @SpringBootTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
-public class StudentUnitTasteCases {
+public class StudentRepositoryUnitTasteCases {
 
     @Autowired
     private StudentJpaRepo studentJpaRepo;

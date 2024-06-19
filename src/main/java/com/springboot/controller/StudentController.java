@@ -2,6 +2,8 @@ package com.springboot.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+
+import com.springboot.Exception.DataNotFoundException;
 import com.springboot.Exception.DuplicateEmailEntryException;
 import com.springboot.Response.SuccsesResponse;
 import com.springboot.entity.Student;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.*;
 
+
+
 @RestController
 @RequestMapping("/api/v1/student")
 public class StudentController {
@@ -32,6 +36,10 @@ public class StudentController {
     private StudentService service;
     SuccsesResponse succsesResponse=null;
 
+    //@RequestMapping(value = "/operations", method = {RequestMethod.GET , RequestMethod.POST , RequestMethod.PUT , RequestMethod.DELETE})
+    
+    
+
     @PostMapping("/addstudent")
     public ResponseEntity<SuccsesResponse> addStudent(@RequestBody Student s) {
             try{
@@ -39,10 +47,10 @@ public class StudentController {
                 succsesResponse = new SuccsesResponse("Student Data Added", 201, s);
                 return new ResponseEntity<SuccsesResponse>(succsesResponse, HttpStatus.CREATED);
             }
-            catch(Exception ex)
+            catch(DuplicateEmailEntryException ex)
             {
-                String messgae = ((DuplicateEmailEntryException) ex).reportDuplicateEmailError();
-                succsesResponse = new SuccsesResponse(messgae , 201, null);
+                String messgae = ex.reportDuplicateEmailError();
+                succsesResponse = new SuccsesResponse(messgae , 201);
                 return new ResponseEntity<SuccsesResponse>(succsesResponse, HttpStatus.CREATED);
             }
     }
@@ -58,7 +66,7 @@ public class StudentController {
     public ResponseEntity<SuccsesResponse> deleteStudent(@PathVariable("id") int id)
     {   
         service.deleteStudent(id);
-        succsesResponse = new SuccsesResponse("Student Deleted Succsfully", 204, null);
+        succsesResponse = new SuccsesResponse("Student Deleted Succsfully", 204);
         return new ResponseEntity<SuccsesResponse>(succsesResponse, HttpStatus.OK);
     }
 
@@ -67,6 +75,21 @@ public class StudentController {
     {   Student student = service.updateStudent(s, id);
             succsesResponse = new SuccsesResponse("Student Data Updated", 200, student);
             return new ResponseEntity<SuccsesResponse>(succsesResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/getstudentbyid/{id}")
+    public ResponseEntity<SuccsesResponse> getStudentsById(@PathVariable("id") int id)
+    {
+        try{
+            Optional<Student> student = service.getStudentsById(id);
+            succsesResponse = new SuccsesResponse("Student Data Retrived",200,student);
+            return new ResponseEntity<SuccsesResponse>(succsesResponse, HttpStatus.OK);
+        }
+        catch(DataNotFoundException ex)
+        {
+            succsesResponse = new SuccsesResponse(ex.exceptionMessage(), 201);
+             return new ResponseEntity<SuccsesResponse>(succsesResponse, HttpStatus.NOT_FOUND);
+        }
     }
 
 }
