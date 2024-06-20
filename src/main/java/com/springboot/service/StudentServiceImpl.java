@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.springboot.DAO.StudentJpaRepo;
 import com.springboot.Exception.DataNotFoundException;
 import com.springboot.Exception.DuplicateEmailEntryException;
+import com.springboot.Exception.StudentNotExitsOfProvidedId;
 import com.springboot.entity.Student;
 
 @Service
@@ -41,14 +42,27 @@ public class StudentServiceImpl implements StudentService{
 
     @Override
     public Student updateStudent(Student s, int id) {
-        
-        return studentJpaRepo.save(s);
+        boolean result = studentJpaRepo.existsById(id);
+        if(result)
+        {   return studentJpaRepo.save(s);
+        }else{
+            StudentNotExitsOfProvidedId exceptinNotExits = new StudentNotExitsOfProvidedId();
+             throw exceptinNotExits;
+        }
     }
 
     @Override
     public void deleteStudent(int id) {
-        System.out.println("Hey i am in delete student");
-        studentJpaRepo.deleteById(id);
+        boolean result = studentJpaRepo.existsById(id);
+        System.out.println("Hey i am in delete student" + result);
+        if(result)
+        {
+            studentJpaRepo.deleteById(id);
+        }else
+        {
+             StudentNotExitsOfProvidedId exceptinNotExits = new StudentNotExitsOfProvidedId();
+             throw exceptinNotExits;
+        }
     }
 
     @Override
